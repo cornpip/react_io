@@ -1,5 +1,5 @@
 import './App.css';
-import Blog from './component/Blog'
+import Blog from './page/Blog'
 
 function App() {
   return (
