@@ -14,20 +14,17 @@ import Footer from '../component/Footer';
 import { post1, post2, post3 }from '@/markdown/index';
 
 const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
+  { title: 'Ai', url: 'ai' },
+  { title: 'Algorithm', url: '#' },
+  { title: 'Back-end', url: '#' },
+  { title: 'Front-end', url: '#' },
+  { title: 'DB', url: '#' },
+  { title: 'Git', url: '#' },
+  { title: 'Employment', url: '#' },
 ];
 
 const mainFeaturedPost = {
-  title: 'Title of a longer featured blog post',
+  title: 'cornpip Blog',
   description:
     "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
   image: 'https://source.unsplash.com/random',
@@ -81,13 +78,22 @@ const sidebar = {
 const theme = createTheme();
 
 let posts = [post1, post2, post3];
-export default function Blog() {
+interface test{
+  chapter :string
+}
+
+Blog.defaultProps = {
+  chapter: ""
+}
+
+export default function Blog(props: test) {
+  const {chapter} = props;
   console.log("bloggggggggg",posts)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="Blog" sections={sections} />
+        <Header title={"Blog" + (chapter ? `_${chapter}`: ``)} sections={sections} />
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
           <Grid container spacing={4}>

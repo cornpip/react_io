@@ -4,7 +4,8 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom'
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -14,13 +15,20 @@ interface HeaderProps {
   title: string;
 }
 
+// color="inherit"
+// noWrap
+// key={section.title}
+// variant="body2"
+// href={section.url}
+// sx={{ p: 1, flexShrink: 0 }}
+
 export default function Header(props: HeaderProps) {
   const { sections, title } = props;
 
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Button size="small">Subscribe</Button>
+        <Button size="medium">Contact</Button>
         <Typography
           component="h2"
           variant="h5"
@@ -34,9 +42,6 @@ export default function Header(props: HeaderProps) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small">
-          Sign up
-        </Button>
       </Toolbar>
       <Toolbar
         component="nav"
@@ -45,12 +50,7 @@ export default function Header(props: HeaderProps) {
       >
         {sections.map((section) => (
           <Link
-            color="inherit"
-            noWrap
-            key={section.title}
-            variant="body2"
-            href={section.url}
-            sx={{ p: 1, flexShrink: 0 }}
+            to={`./${section.title}`}
           >
             {section.title}
           </Link>
