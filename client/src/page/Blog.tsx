@@ -11,7 +11,7 @@ import FeaturedPost from '../component/FeaturedPost';
 import Main from '../component/Main';
 import Sidebar from '../component/Sidebar';
 import Footer from '../component/Footer';
-import { post1, post2, post3 }from '@/markdown/index';
+import { post1, post2, post3 } from '../markdown';
 
 const sections = [
   { title: 'Ai', url: 'ai' },

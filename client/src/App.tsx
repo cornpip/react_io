@@ -1,6 +1,6 @@
 import "./App.css";
 import Blog from "./page/Blog";
-import Ai from "@/page/Ai";
+import Ai from "./page/Ai";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const root_path = "/react_io"
