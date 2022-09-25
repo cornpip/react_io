@@ -1,7 +1,8 @@
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import Markdown from "./Markdown";
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ReactMarkdwon from 'react-markdown';
+import {useEffect, useState} from 'react';
 
 interface MainProps {
   // readonly posts: Promise<string>[];
@@ -10,16 +11,30 @@ interface MainProps {
 }
 
 export default function Main(props: MainProps) {
+  console.log('mainnnnnnnnnnnnnnn');
   const { posts, title } = props;
-  console.log("mainnnnnnnnnnnnnnn");
-  const test = <h1> TEST~~ </h1>;
+  const [ contents, setContents ] = useState<string[]>([])
+
+  async function getcontents(paths: string[]){
+    const contents = paths.map(async (path: string)=>{
+      return await fetch(path).then(res => res.text())
+    })
+    // console.log(contents) // Promise<string[]>
+    const resolve_contents = await Promise.all(contents)
+    setContents(resolve_contents)
+  }
+
+  useEffect(()=>{
+    getcontents(posts)
+  },[])
+
   return (
     <Grid
       item
       xs={12}
       md={8}
       sx={{
-        "& .markdown": {
+        '& .markdown': {
           py: 3,
         },
       }}
@@ -28,12 +43,14 @@ export default function Main(props: MainProps) {
         {title}
       </Typography>
       <Divider />
-      {posts &&
-        posts.map((post) => (
-          <Markdown className="markdown" key={post.substring(20, 30)} path={post}>
-            {post}
-          </Markdown>
-        ))}
+      {
+        contents && contents.map((content)=>{
+          console.log("markdown")
+          return (
+            <ReactMarkdwon key={content} children={content}/>
+          )
+        })
+      }
     </Grid>
   );
 }

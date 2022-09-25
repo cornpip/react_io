@@ -88,7 +88,7 @@ Blog.defaultProps = {
 
 export default function Blog(props: test) {
   const {chapter} = props;
-  console.log("bloggggggggg",posts)
+  console.log("bloggggggggg", chapter)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

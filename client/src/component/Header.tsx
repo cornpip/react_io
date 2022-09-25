@@ -51,6 +51,7 @@ export default function Header(props: HeaderProps) {
         {sections.map((section) => (
           <Link
             to={`./${section.title}`}
+            key={section.title}
           >
             {section.title}
           </Link>
