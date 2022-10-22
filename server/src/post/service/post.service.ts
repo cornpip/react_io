@@ -3,20 +3,24 @@ import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Posting } from '../entities/posting.entity';
+import { Contents } from '../entities/contents.entity';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectRepository(Posting)
-    private postingRepo: Repository<Posting>,
+    @InjectRepository(Contents)
+    private postingRepo: Repository<Contents>,
   ) { }
 
-  async create(createPostDto: CreatePostDto) {
+  async create(
+    createPostDto: CreatePostDto,
+    files: { image ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}
+    ) {
     console.log(createPostDto);
-    const posting = new Posting()
+
+    const posting = new Contents()
     posting.md_path = './test'
-    await this.postingRepo.save(posting)
+    // await this.postingRepo.save(posting)
     return 'This action adds a new post';
   }
 

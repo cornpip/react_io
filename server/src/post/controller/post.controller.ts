@@ -10,14 +10,17 @@ import {
   UploadedFile,
   Bind,
   UploadedFiles,
-  ParseFilePipe,
-  FileTypeValidator,
+  StreamableFile,
+  Res,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { FileFieldsInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { MulterOption } from '@/util/multer_option';
+import { createReadStream } from 'fs';
+import { join } from 'path';
+import { Response } from 'express';
 
 @Controller('post')
 export class PostController {
@@ -27,34 +30,34 @@ export class PostController {
   @UseInterceptors(FileFieldsInterceptor([
       {name : "image", maxCount : 1},
       {name : "md", maxCount : 1}
-  ]))
+  ], MulterOption))
   create(
     @Body() createPostDto: CreatePostDto,
     @UploadedFiles()
-    files : { title_image ?: Array<Express.Multer.File>, md_content ?: Array<Express.Multer.File>}
+    files : { image ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}
   ) {
     console.log("hello localhost/post")
-    console.log(files);
-    console.log(createPostDto)
-    // return this.postService.create(createPostDto);
-    return "hello";
+    // console.log(files.image[0].filename, files.image[0].path);
+    return this.postService.create(createPostDto, files);
+
     // interceptor, uploaded 둘 다 file/files 구분한다.
   }
 
-  // @Post('/featuredImg')
-  // @UseInterceptors(FileInterceptor('file'))
+  @Get(':id')
+  findOne(
+    @Param('id') id: string 
+  ): StreamableFile {
+    const file = createReadStream(join(process.cwd(), 'markdown/action-1666443552055-83102554.txt'));
+    console.log(file.path);
+    console.log(id);
+    return new StreamableFile(file);
+  }
 
-
-  @Get()
+  @Get('/all')
   findAll() {
     return this.postService.findAll();
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
-  }
-
+  
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(+id, updatePostDto);
