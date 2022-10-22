@@ -5,12 +5,12 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Header from '../component/Header';
-import MainFeaturedPost from '../component/MainFeaturedPost';
-import FeaturedPost from '../component/FeaturedPost';
-import Main from '../component/Main';
-import Sidebar from '../component/Sidebar';
-import Footer from '../component/Footer';
+import Header from '../component/Blog/Header';
+import MainFeaturedPost from '../component/Blog/MainFeaturedPost';
+import FeaturedPost from '../component/Blog/FeaturedPost';
+import Main from '../component/Blog/Main';
+import Sidebar from '../component/Blog/Sidebar';
+import Footer from '../component/Blog/Footer';
 import { post1, post2, post3 } from '../markdown';
 
 const sections = [
@@ -77,7 +77,9 @@ const sidebar = {
 
 const theme = createTheme();
 
-let posts = [post1, post2, post3];
+let posts = [post1, post2, post3, "./markdown/hello.md"];
+// post = /react_io/static/media/blog-post.1.feffb8942bbd17649053.md
+
 interface test{
   chapter :string
 }

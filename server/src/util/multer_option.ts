@@ -6,15 +6,20 @@ import { extname, basename } from 'path';
 export const MulterOption: MulterOptions = {
   storage: diskStorage({
     destination: (req, file, cb) => {
-      const uploadPath: string = 'markdown';
+      // console.log(file)
+      const ext = extname(file.originalname); //.png
+      const base = basename(file.originalname, ext); //name
+      const arr = [".jpg", ".png"]
+      const uploadPath = arr.indexOf(ext) == -1 ? "markdown" : "img"
       if (!existsSync(uploadPath)) {
         mkdirSync(uploadPath);
       }
+      console.log(base, ext)
       cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
       const ext = extname(file.originalname);
-      const base = basename(file.originalname);
+      const base = basename(file.originalname, ext);
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
       cb(null, base + '-' + uniqueSuffix + ext);
     },
