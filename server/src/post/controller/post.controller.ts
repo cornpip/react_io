@@ -12,6 +12,7 @@ import {
   UploadedFiles,
   StreamableFile,
   Res,
+  Header,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
@@ -44,10 +45,13 @@ export class PostController {
   }
 
   @Get(':id')
+  // @Header('Content-Type', 'image/jpeg')
   findOne(
     @Param('id') id: string 
   ): StreamableFile {
-    const file = createReadStream(join(process.cwd(), 'markdown/action-1666443552055-83102554.txt'));
+    // book_1666524175087-876151646.png
+    //docker_1666534732389-598109478.txt
+    const file = createReadStream(join(process.cwd(), `markdown\docker_1666534732389-598109478.txt`));
     console.log(file.path);
     console.log(id);
     return new StreamableFile(file);

@@ -88,7 +88,7 @@ Blog.defaultProps = {
   chapter: ""
 }
 
-export default function Blog(props: test) {
+function Blog(props: test) {
   const {chapter} = props;
   console.log("bloggggggggg", chapter)
   return (
@@ -121,3 +121,5 @@ export default function Blog(props: test) {
     </ThemeProvider>
   );
 }
+
+export default Blog
