@@ -1,6 +1,7 @@
 import { 
-    Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn
+    Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany
 } from 'typeorm';
+import { PostImage } from './post-image.entity';
 
 @Entity()
 export class MarkdownPost { //mysql에는 markdown_post 로 들어간다.
@@ -11,14 +12,14 @@ export class MarkdownPost { //mysql에는 markdown_post 로 들어간다.
     featureTitle: string
 
     @Column({ unique : true})
-    mdPath: string
-
-    @Column({ nullable : true})
-    imagePath: string
+    mdName: string
 
     @CreateDateColumn()
     created: Date
 
     @UpdateDateColumn()
     updated: Date
+
+    @OneToMany(() => PostImage, (image) => image.post)
+    images: PostImage[]
 }

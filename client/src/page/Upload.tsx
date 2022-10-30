@@ -19,7 +19,7 @@ export default function Upload() {
     function submitHandler(e: React.PointerEvent<HTMLButtonElement>) {
         // console.log(e);
         //formdata 안에 값 getAll("프로퍼티") method로 확인가능, 그냥 console은 안나온다.
-        // console.log(formData.getAll("image"));
+        // console.log(formData.getAll("images"));
         // console.log(formData.getAll("md"));
         if (!title) setErr(true);
         if (!formData.has("md")){
@@ -43,18 +43,18 @@ export default function Upload() {
                 .then(d => console.log(d))
         }
     }
-    function inputHandler(e: React.ChangeEvent<HTMLInputElement>, image: boolean) {
+    function inputHandler(e: React.ChangeEvent<HTMLInputElement>, images: boolean) {
         const files = e.target.files;
-        image ? formData.delete("image") : formData.delete("md"); //초기화
+        images ? formData.delete("images") : formData.delete("md"); //초기화
         if (files !== null) {
             const info = [];
             const fleng = files.length;
             for (let i = 0; i < fleng; i++) {
                 info.push([files[i].name, files[i].type, Math.round(files[i].size / 1024)])
+                images ? formData.append("images", files[i]) : formData.append("md", files[i]);
             }
 
-            image ? setFilesInfo(info) : setfilesinfoMd(info);
-            image ? formData.append("image", files[0]) : formData.append("md", files[0]);
+            images ? setFilesInfo(info) : setfilesinfoMd(info);
             // formData는 reder 요소가 아니므로 굳이 setstate 하지 않아도 된다.
         }
         // console.log(e.target.files);
@@ -82,7 +82,7 @@ export default function Upload() {
                 </Grid>
                 <Grid xs={12}>
                     <Typography variant='h6' component="span">
-                        Feature Image
+                        Feature images
                     </Typography>
                     <Button
                         color="secondary"

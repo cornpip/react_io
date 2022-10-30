@@ -3,29 +3,39 @@ import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MarkdownPost } from '../entities/markdownpost.entity';
+import { MarkdownPost, PostImage } from '../entities';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(MarkdownPost)
     private markdownrepo: Repository<MarkdownPost>,
+
+    @InjectRepository(PostImage)
+    private postimages: Repository<PostImage>
   ) { }
 
   async create(
     createPostDto: CreatePostDto,
-    files: { image ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}
+    files: { images ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}
     ) {
     // console.log(createPostDto);
-    // console.log(files);
+    console.log(files);
     const mdpost = new MarkdownPost();
     mdpost.featureTitle = createPostDto.feature_title;
-    mdpost.mdPath = files.md[0].path;
-    if (files.image) mdpost.imagePath = files.image[0].path;
-    // mdpost.imagePath = "markdown\\\\docker_1666543648543-540566015.txt"
-    console.log(mdpost);
+    mdpost.mdName = files.md[0].filename;
     await this.markdownrepo.save(mdpost);
 
+    if (files.images) {
+      files.images.map(async (img)=> {
+        const postimage = new PostImage();
+        postimage.post = mdpost;
+        postimage.imageName = img.filename;
+        await this.postimages.save(postimage)        
+      })
+    }
+    // mdpost.imagePath = "markdown\\\\docker_1666543648543-540566015.txt"
+    console.log(mdpost);
     return 'This action adds a new mdpost';
   }
 
