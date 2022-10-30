@@ -3,6 +3,9 @@ import { diskStorage } from 'multer';
 import { existsSync, mkdirSync } from 'fs';
 import { extname, basename } from 'path';
 
+// controller에 명시적이긴 하지만
+// 이렇게 사용하는 모듈은 nest의 관리에서 벗어났다.
+// 의존성 주입도 어렵고 그냥 express의 모듈이란 느낌
 export const MulterOption: MulterOptions = {
   storage: diskStorage({
     destination: (req, file, cb) => {

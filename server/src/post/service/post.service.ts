@@ -20,7 +20,7 @@ export class PostService {
     files: { images ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}
     ) {
     // console.log(createPostDto);
-    console.log(files);
+    // console.log(files);
     const mdpost = new MarkdownPost();
     mdpost.featureTitle = createPostDto.feature_title;
     mdpost.mdName = files.md[0].filename;

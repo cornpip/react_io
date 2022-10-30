@@ -16,7 +16,7 @@ import { DbConfig } from './config/db.config';
     TypeOrmModule.forRootAsync({
       useClass: DbConfig
     }),
-    PostModule
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

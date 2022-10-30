@@ -18,10 +18,8 @@ import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { FileFieldsInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { MulterOption } from '@/util/multer_option';
 import { createReadStream } from 'fs';
 import { join } from 'path';
-import { Response } from 'express';
 
 @Controller('post')
 export class PostController {
@@ -31,7 +29,7 @@ export class PostController {
   @UseInterceptors(FileFieldsInterceptor([
       {name : "images", maxCount : 5},
       {name : "md", maxCount : 1}
-  ], MulterOption))
+  ]))
   create(
     @Body() createPostDto: CreatePostDto,
     @UploadedFiles()
