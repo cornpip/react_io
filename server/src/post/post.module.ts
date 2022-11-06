@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MarkdownPost, PostImage } from './entities';
 import { MulterModule } from "@nestjs/platform-express"
 import { MulterPostConfig } from '@/util/multer-post';
+import { IsFile } from '@/util/multer-pipe';
 
 @Module({
   imports: [
@@ -12,12 +13,14 @@ import { MulterPostConfig } from '@/util/multer-post';
       MarkdownPost,
       PostImage,
     ]),
-
     MulterModule.registerAsync({
       useClass: MulterPostConfig,
-    })
+    }),
   ],
   controllers: [PostController],
-  providers: [PostService]
+  providers: [
+    PostService,
+    IsFile
+  ]
 })
 export class PostModule { }

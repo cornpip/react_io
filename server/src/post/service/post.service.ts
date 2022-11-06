@@ -17,8 +17,8 @@ export class PostService {
 
   async create(
     createPostDto: CreatePostDto,
-    files: { images ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}
-    ) {
+    files: { images?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> }
+  ) {
     // console.log(createPostDto);
     // console.log(files);
     const mdpost = new MarkdownPost();
@@ -27,11 +27,11 @@ export class PostService {
     await this.markdownrepo.save(mdpost);
 
     if (files.images) {
-      files.images.map(async (img)=> {
+      files.images.map(async (img) => {
         const postimage = new PostImage();
         postimage.post = mdpost;
         postimage.imageName = img.filename;
-        await this.postimages.save(postimage)        
+        await this.postimages.save(postimage)
       })
     }
     // mdpost.imagePath = "markdown\\\\docker_1666543648543-540566015.txt"
@@ -39,12 +39,31 @@ export class PostService {
     return 'This action adds a new mdpost';
   }
 
-  findAll() {
-    return `This action returns all post`;
+  async findAll() {
+    const res = await this.markdownrepo.find({
+      relations: {
+        images: true
+      }, order: {
+        id: "ASC"
+      }
+    });
+    return res;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(param_id: number) {
+    const res = await this.markdownrepo.find({
+      relations: {
+        images: true
+      },
+      where: {
+        id: param_id
+      },
+    });
+    return res;
+  }
+
+  findFile(id: number) {
+    return `This action return file/files`
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

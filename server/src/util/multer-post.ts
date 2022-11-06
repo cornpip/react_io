@@ -18,6 +18,7 @@ export class MulterPostConfig implements MulterOptionsFactory {
         return {
             storage: diskStorage({
                 destination: (req, file, cb) => {
+                    console.log("hello multer")
                     // console.log(req.body); //multer가 @Body 보다 먼저라 비어있다.
                     const ext = extname(file.originalname); //.png
                     const base = basename(file.originalname, ext); //base 분리할 때 까지는 Lowercase X
