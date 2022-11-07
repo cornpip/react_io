@@ -6,6 +6,7 @@ import { MarkdownPost, PostImage } from './entities';
 import { MulterModule } from "@nestjs/platform-express"
 import { MulterPostConfig } from '@/util/multer-post';
 import { IsFile } from '@/util/multer-pipe';
+import { FileController } from './controller/file.controller';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { IsFile } from '@/util/multer-pipe';
       useClass: MulterPostConfig,
     }),
   ],
-  controllers: [PostController],
+  controllers: [PostController, FileController],
   providers: [
     PostService,
     IsFile

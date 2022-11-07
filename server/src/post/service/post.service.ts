@@ -17,7 +17,7 @@ export class PostService {
 
   async create(
     createPostDto: CreatePostDto,
-    files: { images?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> }
+    files: { image?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> }
   ) {
     // console.log(createPostDto);
     // console.log(files);
@@ -26,8 +26,8 @@ export class PostService {
     mdpost.mdName = files.md[0].filename;
     await this.markdownrepo.save(mdpost);
 
-    if (files.images) {
-      files.images.map(async (img) => {
+    if (files.image) {
+      files.image.map(async (img) => {
         const postimage = new PostImage();
         postimage.post = mdpost;
         postimage.imageName = img.filename;

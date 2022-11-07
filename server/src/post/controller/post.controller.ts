@@ -8,9 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Bind,
   UploadedFiles,
-  StreamableFile,
   Res,
   Header,
   Req,
@@ -21,25 +19,25 @@ import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { createReadStream } from 'fs';
-import { join } from 'path';
 import { IsFile } from '@/util/multer-pipe';
 
 @Controller('post')
 export class PostController {
   constructor(
     private readonly postService: PostService,
-    private readonly isFile: IsFile,
   ) { }
+
   @Post('/')
   // @UseInterceptors(FilesInterceptor('files', 2, MulterOption)) //MulterOption
   @UseInterceptors(FileFieldsInterceptor([
-    { name: "images", maxCount: 5 },
+    { name: "image", maxCount: 1 },
     { name: "md", maxCount: 1 }
   ]))
   create(
+    // 일단 create에서 받는 image는 대표 image 하나로 생각
+    // 현재 entity 는 images다
     @UploadedFiles(new IsFile())
-    files: { images?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> },
+    files: { image?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> },
     @Body() createPostDto: CreatePostDto
   ) {
     console.log("hello localhost/post")
@@ -54,7 +52,6 @@ export class PostController {
   }
 
   @Get(':id')
-  // @Header('Content-Type', 'image/jpeg')
   findOne(
     @Param('id') id: number
   ) {
@@ -73,20 +70,6 @@ export class PostController {
     // console.log(files);
     console.log(body);
     return `test 입니당`
-  }
-
-  @Post('/file')
-  findFile(
-    @Body() body: any
-  ) { //: StreamableFile
-    // book_1666524175087-876151646.png
-    //docker_1666534732389-598109478.txt
-    console.log(body);
-    console.log("##### get File");
-    // const file = createReadStream(join(process.cwd(), `markdown\docker_1666534732389-598109478.txt`));
-    // console.log(file.path);
-    // return new StreamableFile(file);
-    return
   }
 
   @Patch(':id')
