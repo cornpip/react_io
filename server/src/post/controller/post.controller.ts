@@ -14,15 +14,18 @@ import {
   Req,
   ParseFilePipe,
   FileTypeValidator,
+  Logger,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { IsFile } from '@/util/multer-pipe';
+import { IsFile } from '@/util/is_file';
 
 @Controller('post')
 export class PostController {
+  private readonly logger = new Logger(PostController.name);
+
   constructor(
     private readonly postService: PostService,
   ) { }
@@ -40,14 +43,14 @@ export class PostController {
     files: { image?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> },
     @Body() createPostDto: CreatePostDto
   ) {
-    console.log("hello localhost/post")
-    return this.postService.create(createPostDto, files);
+    this.logger.debug("hello localhost/post")
+    // return this.postService.create(createPostDto, files);
     // interceptor, uploaded 둘 다 file/files 구분한다.
   }
 
   @Get('/all')
   findAll() {
-    console.log("##### get all");
+    this.logger.debug("##### get all");
     return this.postService.findAll();
   }
 
@@ -67,8 +70,8 @@ export class PostController {
     // files: any,
     @Body() body: any
   ) {
-    // console.log(files);
-    console.log(body);
+    // this.logger.debug(files);
+    this.logger.debug(body);
     return `test 입니당`
   }
 

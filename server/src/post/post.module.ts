@@ -4,8 +4,8 @@ import { PostController } from './controller/post.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MarkdownPost, PostImage } from './entities';
 import { MulterModule } from "@nestjs/platform-express"
-import { MulterPostConfig } from '@/util/multer-post';
-import { IsFile } from '@/util/multer-pipe';
+import { MulterPostConfig } from '@/util/multer_post_config';
+import { IsFile } from '@/util/is_file';
 import { FileController } from './controller/file.controller';
 
 @Module({
