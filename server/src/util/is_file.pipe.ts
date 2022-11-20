@@ -4,9 +4,9 @@ import { PipeTransform, Injectable, ArgumentMetadata, HttpException, HttpStatus,
 export class IsFile implements PipeTransform {
     private readonly logger = new Logger(IsFile.name);
 
-    transform(value: any, metadata: ArgumentMetadata) {
+    transform(value: {image ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>}, metadata: ArgumentMetadata) {
         // this.logger.debug(value["md"]);
-        if(!value["md"]){
+        if(!value.md){
             this.logger.log("### Pipe : Bad request")
             throw new HttpException('Not found md File', HttpStatus.BAD_REQUEST);
         }

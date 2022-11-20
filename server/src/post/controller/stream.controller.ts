@@ -4,7 +4,7 @@ import { join } from 'path';
 import { ReadFileDto } from '../dto';
 
 @Controller('file')
-export class FileController {
+export class StreamController {
 
     @Post('/md')
     getFile(

@@ -7,20 +7,16 @@ import {
   Param,
   Delete,
   UseInterceptors,
-  UploadedFile,
   UploadedFiles,
-  Res,
-  Header,
-  Req,
-  ParseFilePipe,
-  FileTypeValidator,
   Logger,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { IsFile } from '@/util/is_file';
+import { IsFile } from '@/util/is_file.pipe';
+import { ConfigService } from '@nestjs/config';
+import { TestService } from '@/test/test.service';
 
 @Controller('post')
 export class PostController {
@@ -28,6 +24,8 @@ export class PostController {
 
   constructor(
     private readonly postService: PostService,
+    private configService: ConfigService,
+    private readonly testService: TestService
   ) { }
 
   @Post('/')
@@ -62,16 +60,23 @@ export class PostController {
   }
 
   @Post('/test')
-  @UseInterceptors(FilesInterceptor('md'))
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: "image", maxCount: 1 },
+    { name: "md", maxCount: 1 }
+  ]))
   test(
-    // @UploadedFiles(
-    //   // new IsFile(),
-    // )
-    // files: any,
+    @UploadedFiles(
+      new IsFile(),
+      // this.SaveFilePipe() //데코레이터 인자 안에서 this는 contorller와 다른 듯 하다.
+    ) files: {image ?: Array<Express.Multer.File>, md ?: Array<Express.Multer.File>},
     @Body() body: any
   ) {
-    // this.logger.debug(files);
-    this.logger.debug(body);
+    this.testService.hello();
+    this.testService.countup();
+    this.testService.getcount();
+    // console.log(files);
+    // logger.debug format 없이 다나온다. (buffer 같은거 foramt없이 다 출력)
+    // this.logger.debug(files.image);
     return `test 입니당`
   }
 

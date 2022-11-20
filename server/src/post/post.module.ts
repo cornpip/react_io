@@ -5,8 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MarkdownPost, PostImage } from './entities';
 import { MulterModule } from "@nestjs/platform-express"
 import { MulterPostConfig } from '@/util/multer_post_config';
-import { IsFile } from '@/util/is_file';
-import { FileController } from './controller/file.controller';
+import { StreamController } from './controller/stream.controller';
+import { ConfigModule } from '@nestjs/config';
+import { TestModule } from '@/test/test.module';
+import { TestService } from '@/test/test.service';
 
 @Module({
   imports: [
@@ -14,14 +16,14 @@ import { FileController } from './controller/file.controller';
       MarkdownPost,
       PostImage,
     ]),
-    MulterModule.registerAsync({
-      useClass: MulterPostConfig,
-    }),
+    TestModule,
+    // MulterModule.registerAsync({
+    //   useClass: MulterPostConfig,
+    // }),
   ],
-  controllers: [PostController, FileController],
+  controllers: [PostController, StreamController],
   providers: [
     PostService,
-    IsFile
   ]
 })
 export class PostModule { }
