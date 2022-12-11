@@ -15,7 +15,6 @@ import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { IsFile } from '@/util/is_file.pipe';
-import { ConfigService } from '@nestjs/config';
 import { TestService } from '@/test/test.service';
 
 @Controller('post')
@@ -24,12 +23,13 @@ export class PostController {
 
   constructor(
     private readonly postService: PostService,
-    private configService: ConfigService,
     private readonly testService: TestService
   ) { }
 
   @Post('/')
-  // @UseInterceptors(FilesInterceptor('files', 2, MulterOption)) //MulterOption
+  // @UseInterceptors(FilesInterceptor('files', 2)) //MulterOption
+  // 1차적으로 interceptor에서 없는 field가 들어오면 "Unexpected field" + 400error
+  // 명시된 field가 안들어오는건 상관X
   @UseInterceptors(FileFieldsInterceptor([
     { name: "image", maxCount: 1 },
     { name: "md", maxCount: 1 }
@@ -37,18 +37,19 @@ export class PostController {
   create(
     // 일단 create에서 받는 image는 대표 image 하나로 생각
     // 현재 entity 는 images다
-    @UploadedFiles(new IsFile())
-    files: { image?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> },
+    @UploadedFiles(new IsFile()) //new IsFile()
+    files: { image: Array<Express.Multer.File>, md: Array<Express.Multer.File> },
     @Body() createPostDto: CreatePostDto
   ) {
-    this.logger.debug("hello localhost/post")
-    // return this.postService.create(createPostDto, files);
+    this.logger.debug("hello localhost/post");
+    console.log(files);
+    return this.postService.create(createPostDto, files);
     // interceptor, uploaded 둘 다 file/files 구분한다.
   }
 
   @Get('/all')
   findAll() {
-    this.logger.debug("##### get all");
+    this.logger.debug("hello localhost/post/all");
     return this.postService.findAll();
   }
 
@@ -56,6 +57,7 @@ export class PostController {
   findOne(
     @Param('id') id: number
   ) {
+    this.logger.debug("##### get id");
     return this.postService.findOne(id);
   }
 

@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '@/config/configuration'
 import { DbConfig } from './config/db.config';
-import { UtilModule } from './util/util.module';
 import { TestController } from './test/test.controller';
 import { TestService } from './test/test.service';
 import { TestModule } from './test/test.module';
@@ -21,7 +20,6 @@ import { TestModule } from './test/test.module';
       useClass: DbConfig
     }),
     PostModule,
-    UtilModule,
     TestModule,
   ],
   controllers: [AppController, TestController],

@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MarkdownPost, PostImage } from '../entities';
+import { PostFs } from '@/util/post_fs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PostService {
@@ -12,30 +14,38 @@ export class PostService {
     private markdownrepo: Repository<MarkdownPost>,
 
     @InjectRepository(PostImage)
-    private postimages: Repository<PostImage>
+    private postimages: Repository<PostImage>,
+
+    private configService: ConfigService
   ) { }
 
   async create(
     createPostDto: CreatePostDto,
     files: { image?: Array<Express.Multer.File>, md?: Array<Express.Multer.File> }
   ) {
+    // post에는 image, md 하나씩만 필히 받음
     // console.log(createPostDto);
     // console.log(files);
-    const mdpost = new MarkdownPost();
-    mdpost.featureTitle = createPostDto.feature_title;
-    mdpost.mdName = files.md[0].filename;
-    await this.markdownrepo.save(mdpost);
+    const [mdName, mdcb] = PostFs(files.md[0], this.configService);
+    const [imgName, imgcb] = PostFs(files.image[0], this.configService);
+    try {
+      const mdpost = new MarkdownPost();
+      mdpost.featureTitle = createPostDto.feature_title;
+      mdpost.mdName = mdName;
+      await this.markdownrepo.save(mdpost);
+      // 이런 case에서 rollback이 필요한거구나
+      // post table과 정상작동했고 image table에서 트랜잭션에서 문제가 발생했다면 post의 트랜잭션은 rollback할 필요가 있는거지
 
-    if (files.image) {
-      files.image.map(async (img) => {
-        const postimage = new PostImage();
-        postimage.post = mdpost;
-        postimage.imageName = img.filename;
-        await this.postimages.save(postimage)
-      })
+      const postimage = new PostImage();
+      postimage.post = mdpost;
+      postimage.imageName = imgName;
+      await this.postimages.save(postimage);
+      
+    } catch (err) {
+      throw new HttpException("post transaction not working", HttpStatus.FORBIDDEN);
     }
-    // mdpost.imagePath = "markdown\\\\docker_1666543648543-540566015.txt"
-    console.log(mdpost);
+
+    mdcb(); imgcb();
     return 'This action adds a new mdpost';
   }
 

@@ -11,9 +11,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={root_path} element={<Blog />} />
-        <Route path={root_path + "/ai"} element={<Ai />} />
-        <Route path="/upload" element={<Upload />}/>
+        <Route path={process.env.REACT_APP_ROOT} element={<Blog />} />
+        <Route path={process.env.REACT_APP_ROOT + "/ai"} element={<Ai />} />
+        <Route path={process.env.REACT_APP_ROOT + "/upload"} element={<Upload />}/>
         <Route path="/test" element={<Test />}/>
       </Routes>
     </BrowserRouter>
