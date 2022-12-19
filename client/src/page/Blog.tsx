@@ -104,7 +104,7 @@ function Blog(props: test) {
             ))}
           </Grid>
           <Grid container spacing={5} sx={{ mt: 3 }}>
-            <Main title="Recent Posts" />
+            <Main />
             <Sidebar
               title={sidebar.title}
               description={sidebar.description}
