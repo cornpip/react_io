@@ -54,7 +54,7 @@ export class PostService {
       relations: {
         images: true
       }, order: {
-        id: "ASC"
+        id: "DESC"
       }
     });
     return res;

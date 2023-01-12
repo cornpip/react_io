@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import ReactMarkdwon from 'react-markdown';
 import { useEffect, useState } from 'react';
+import ReactMd from '../MarkDown/Reactmd';
 import PostAPI from '../../api/post';
 import { IPost } from "../../interface/post.interface"
 
@@ -24,6 +24,12 @@ export default function Main(props: any) {
   console.log('mainnnnnnnnnnnnnnn');
   const [posts, setPosts] = useState<Array<IPost>>([]);
   const [contents, setContents] = useState<Array<string>>([]);
+
+  function timeShow(time: string) {
+    const rtime = new Date(time);
+    return `${rtime.getFullYear()}-${(rtime.getMonth() + 1).toString().padStart(2, "0")}-${rtime.getDate().toString().padStart(2, "0")}`;
+  }
+
 
   async function sleep() {
     return new Promise((resolve, reject) => {
@@ -68,12 +74,12 @@ export default function Main(props: any) {
             <div key={content}>
               <Typography variant="overline" sx={{}}>
                 {/* overline center 안먹힘 */}
-                {posts[i].created}
+                {timeShow(posts[i].created)}
               </Typography>
               <Typography variant="h2" align="center" sx={{ mx: 2, mb: 2 }}>
                 {posts[i].featureTitle}
               </Typography>
-              <ReactMarkdwon children={content} />
+              <ReactMd text={content} />
               <Divider />
             </div>
           )
